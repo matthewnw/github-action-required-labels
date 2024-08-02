@@ -39,3 +39,6 @@ inputs:
   use_regex:
     description: Evaluate the values in `labels` as regular expressions
     default: "false"
+  regex_all_labels:
+    description: Evaluate the labels in a single comma separated list as regular expressions rather than individually
+    default: "false"
