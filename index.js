@@ -24,6 +24,7 @@ async function action() {
     const exitType = core.getInput("exit_type") || "failure";
     const shouldAddComment = core.getInput("add_comment") == "true";
     const labelsAreRegex = core.getInput("use_regex") == "true";
+    const regexAllLabelsAtOnce = core.getInput("regex_all_labels") == "true";
 
     let providedLabels = core.getInput("labels", { required: true });
 
@@ -83,7 +84,13 @@ async function action() {
 
     // How many labels overlap?
     let intersection = [];
-    if (labelsAreRegex) {
+    if (regexAllLabelsAtOnce && labelsAreRegex) {
+      // Join all labels and apply each regex in one check
+      const allAppliedLabels = appliedLabels.join(',')
+      intersection = providedLabels.some((providedLabel) =>
+          new RegExp(providedLabel, "i").test(allAppliedLabels)
+      )
+    } else if (labelsAreRegex) {
       intersection = appliedLabels.filter((appliedLabel) =>
         providedLabels.some((providedLabel) =>
           new RegExp(providedLabel, "i").test(appliedLabel)
