@@ -87,8 +87,10 @@ async function action() {
     if (regexAllLabelsAtOnce && labelsAreRegex) {
       // Join all labels and apply each regex in one check
       const allAppliedLabels = appliedLabels.join(',')
-      core.warning(allAppliedLabels);
-      intersection = providedLabels.some((providedLabel) =>
+      core.info("Checking Regex pattern against the following labels");
+      core.info(allAppliedLabels);
+
+      intersection = providedLabels.filter((providedLabel) =>
           new RegExp(providedLabel, "i").test(allAppliedLabels)
       )
     } else if (labelsAreRegex) {
